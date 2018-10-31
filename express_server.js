@@ -36,10 +36,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  if(!urlDatabase[req.params.shortURL]) {
-    res.status(404).send('Error: 404: Page not found. <a href="/"> Go Back </a>');
-  }
-  res.redirect(urlDatabase[req.params.shortURL].longURL);
+  let longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+  console.log(longURL);
 });
 
 app.get("/urls.json", (req, res) => {
