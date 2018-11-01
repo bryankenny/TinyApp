@@ -1,8 +1,3 @@
-//use random num to get key
-//add key + user URL to urldatabse
-//redirect to url/new
-
-
 
 function generateRandomString() {
  return  Math.random().toString(36).replace('0.', '') .slice(5);
@@ -29,6 +24,19 @@ app.post("/urls", (req, res) => {
   let sURL = generateRandomString();
   urlDatabase[sURL] = req.body.longURL;
   res.redirect('/urls/'+sURL);
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+   let shortURL = urlDatabase[req.params.shortURL];
+  delete urlDatabase[req.params.id];
+  res.redirect("/urls");
+  console.log(req.params.id)
+});
+
+app.post("/urls/:id/update", (req, res) => {
+  console.log(req.body);
+  urlDatabase[req.params.id] = req.body.newURL
+  res.redirect('/urls');
 });
 
 app.get("/", (req, res) => {

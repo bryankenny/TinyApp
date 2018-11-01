@@ -4,12 +4,21 @@
 <head>
   <title>TinyApp</title>
 </head>
+ <% include partials/_header %>
 <body>
    <ul>
-    <% Object.keys(url).forEach(function(key) { %>
-        <li><%= key + ":" + url[key] %></li>
+    <% Object.keys(url).forEach(function(key)  { %>
+        <li><%= key + ":" + url[key] %>
+           <form method = "POST" action=<%-"/urls/" + key + "/delete"%>>
+             <input type="submit" value="Delete">
+           </form>
+        <form method = "GET" action=<%-"/urls/" + key %>>
+             <input type="submit" value="Edit">
+           </form>
+        </li>
     <% }); %>
 </ul>
+<a href='#'> </a>
 </body>
 </html>
 
