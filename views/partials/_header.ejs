@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <header>
-    <title> a fun title</title>
+    <title> Url Shortener</title>
   </header>
   <body>
-    <form action="/login" method="POST">
-      Username:
-      <br>
-        <input name="username" type="text" value="username">
-      <br>
-        <input type="submit" value="Sign in">
+    <% if(username){ %>
+    <%= username + " " + "Signed In" %>
+    <form method="POST" action="/logout">
+        <button type="submit">Logout</button>
     </form>
+  <% } else{ %>
+    <form method="POST" action="/login">
+        <input type="text" placeholder="" style="width: 300px" name="username">
+        <button type="submit">Login</button>
+    </form>
+ <% } %>
   </body>
 </html>
