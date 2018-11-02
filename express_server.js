@@ -18,6 +18,18 @@ const urlDatabase = {
   "9sm5xK" : "http://www.google.com"
 };
 
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
 
 app.post("/urls", (req, res) => {
   console.log(req.body);  // debug statement to see POST parameters
@@ -41,9 +53,7 @@ app.post("/urls/:id/update", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    console.log('req body', req.body.username)
   res.cookie("username", req.body.username);
-
   res.redirect("/urls")
 });
 
@@ -52,9 +62,37 @@ app.post("/logout", (req, res)=>{
     res.redirect('/urls')
 })
 
+app.post("/registration", (req, res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  let newUserID = generateRandomString();
+  users[userID] = {
+    email: email,
+    password: password,
+    id: newUserID
+  }
+  if (!req.body.email || !req.body.password) {
+        res.status(400).send("Email and/or password field incomplete");
+    }
+    for (let i in users) {
+        if (users[newUserID].email === users[i].email) {
+        res.status(400).send("User email already registered")
+    }
+}
+  res.cookie("user_id", req.body.newUserID);
+    console.log(users)
+    res.redirect('/urls')
+})
+
 app.get("/", (req, res) => {
   res.redirect('/urls/new');
 });
+
+app.get("/registration", (req, res) => {
+  let templateVar = {
+  username: req.cookies["username"]};
+  res.render("registration", templateVar);
+})
 
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
