@@ -3,8 +3,8 @@
   <header>
     <title> Url Shortener</title>
   </header>
-  <% if(username){ %>
-    <%= username + " " + "Signed In" %>
+  <% if(user && user.id){ %>
+    <%= user.id + " " + "Signed In" %>
   <body>
     <form method="POST" action="/logout">
         <input type="submit" value="Logout" name="username">

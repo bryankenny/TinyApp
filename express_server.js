@@ -1,5 +1,3 @@
-
-
 function generateRandomString() {
  return  Math.random().toString(36).replace('0.', '') .slice(5);
  };
@@ -37,7 +35,7 @@ app.post("/urls", (req, res) => {
   //res.send("Ok");         // Respond with 'Ok' (we will replace this)
   let sURL = generateRandomString();
   urlDatabase[sURL] = req.body.longURL;
-  res.redirect('/urls/'    );
+  res.redirect('/urls/');
 });
 
 app.post("/urls/:id/delete", (req, res) => {
@@ -54,46 +52,58 @@ app.post("/urls/:id/update", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username);
+  res.cookie("user_id");
   res.redirect("/urls")
 });
 
 app.post("/logout", (req, res)=>{
-    res.clearCookie("username");
+    res.clearCookie("user_id");
     res.redirect('/urls')
 })
 
 app.post("/registration", (req, res) => {
   let email = req.body.email;
+    if (!req.body.email || !req.body.password) {
+        res.status(400).send("Email and/or password field incomplete");
+    }
+  let matchedEmail;
+    for (let i in users) {
+    if (email === users[i].email) {
+        matchedEmail = true
+      }
+    }
+    if (matchedEmail) return res.status(400).send("User email already registered")
   let password = req.body.password;
   let newUserID = generateRandomString();
-  users[newUserID] = {
+
+    users[newUserID] = {
     email: email,
     password: password,
     id: newUserID
   }
-  if (!req.body.email || !req.body.password) {
-        res.status(400).send("Email and/or password field incomplete");
-    }
-    for (let i in users) {
-        if (users[newUserID].email === users[i].email) {
-        res.status(400).send("User email already registered")
-    }
-}
-  res.cookie("user_id", req.body.newUserID);
+
+  res.cookie("user_id", newUserID);
     console.log(users)
     res.redirect('/urls')
 })
+
+
+// app.get("/login", (req, res) => {
+//   res.render("login")
+// })
+
 
 app.get("/", (req, res) => {
   res.redirect('/urls/new');
 });
 
+
 app.get("/registration", (req, res) => {
   let templateVar = {
-  username: req.cookies["username"], url: urlDatabase };
+  user: users[req.cookies["user_id"]], url: urlDatabase };
   res.render("registration", templateVar);
 })
+
 
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
@@ -101,32 +111,36 @@ app.get("/u/:shortURL", (req, res) => {
   console.log(longURL);
 });
 
+
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+
 app.get("/urls/new", (req, res) => {
   let templateVar = {
-  username: req.cookies["username"], url: urlDatabase };
+  user: users[req.cookies["user_id"]], url: urlDatabase };
   res.render("urls_new", templateVar);
 });
+
 
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+
 app.get("/urls", (req, res) => {
     let templateVar = {
-  username: req.cookies["username"], url: urlDatabase };
+  user: users[req.cookies["user_id"]], url: urlDatabase };
   res.render("urls_index.ejs", templateVar);
 });
 
+
 app.get("/urls/:id", (req, res) => {
  let templateVars = {
-  username: req.cookies["username"], shortURL: req.params.id, longURL: urlDatabase[req.params.id]};
+  user: users[req.cookies["user_id"]], shortURL: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
  });
-
 
 
 app.listen(PORT, () => {
