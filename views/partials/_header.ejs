@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-  <header>
-    <title> Url Shortener</title>
-  </header>
   <% if(user && user.id){ %>
     <%= user.id + " " + "Signed In" %>
-  <body>
     <form method="POST" action="/logout">
         <input type="submit" value="Logout" name="username">
     </form>
-  <% } else{ %>
-    <form method="POST" action="/login">
-      <input type="text" placeholder="" style="width: 300px" name="username">
-      <input type="submit" value="Login">
-    </form>
- <% } %>
-  </body>
-</html>
+<% }%>
+ <a href="http://localhost:8080/registration">Registration Page</a>
+  <div><a href="http://localhost:8080/login">Login Page</a></div>
+

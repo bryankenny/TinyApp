@@ -52,7 +52,7 @@ app.post("/urls/:id/update", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("user_id");
+  res.cookie("username", req.body.username);
   res.redirect("/urls")
 });
 
@@ -88,9 +88,11 @@ app.post("/registration", (req, res) => {
 })
 
 
-// app.get("/login", (req, res) => {
-//   res.render("login")
-// })
+app.get("/login", (req, res) => {
+  let templateVar = {
+  user: users[req.cookies["user_id"]], url: urlDatabase };
+  res.render("login", templateVar);
+  })
 
 
 app.get("/", (req, res) => {
