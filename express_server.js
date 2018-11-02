@@ -1,4 +1,5 @@
 
+
 function generateRandomString() {
  return  Math.random().toString(36).replace('0.', '') .slice(5);
  };
@@ -36,7 +37,7 @@ app.post("/urls", (req, res) => {
   //res.send("Ok");         // Respond with 'Ok' (we will replace this)
   let sURL = generateRandomString();
   urlDatabase[sURL] = req.body.longURL;
-  res.redirect('/urls/'+sURL);
+  res.redirect('/urls/'    );
 });
 
 app.post("/urls/:id/delete", (req, res) => {
@@ -66,7 +67,7 @@ app.post("/registration", (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   let newUserID = generateRandomString();
-  users[userID] = {
+  users[newUserID] = {
     email: email,
     password: password,
     id: newUserID
@@ -90,7 +91,7 @@ app.get("/", (req, res) => {
 
 app.get("/registration", (req, res) => {
   let templateVar = {
-  username: req.cookies["username"]};
+  username: req.cookies["username"], url: urlDatabase };
   res.render("registration", templateVar);
 })
 
@@ -104,24 +105,24 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+app.get("/urls/new", (req, res) => {
+  let templateVar = {
+  username: req.cookies["username"], url: urlDatabase };
+  res.render("urls_new", templateVar);
+});
+
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 app.get("/urls", (req, res) => {
-  let templateVar = {
+    let templateVar = {
   username: req.cookies["username"], url: urlDatabase };
   res.render("urls_index.ejs", templateVar);
 });
 
-app.get("/urls/new", (req, res) => {
-   let templateVar = {
-  username: req.cookies["username"], url: urlDatabase };
-  res.render("urls_new", templateVar);
-});
-
 app.get("/urls/:id", (req, res) => {
-  let templateVars = {
+ let templateVars = {
   username: req.cookies["username"], shortURL: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
  });
@@ -131,5 +132,3 @@ app.get("/urls/:id", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-
