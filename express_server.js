@@ -52,9 +52,22 @@ app.post("/urls/:id/update", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username);
-  res.redirect("/urls")
-});
+  let userEmail = "";
+  let userPass = "";
+   for (let x in users) {
+    if (users[x]['email'] == req.body.email && users[x]['password'] == req.body.password) {
+      userEmail = req.body.email;
+      userPass = req.body.password;
+      res.cookie("user_id", users[x]["id"]);
+    }
+  }
+   if (userEmail.length > 0 && userPass.length > 0) {
+    res.redirect('/');
+  }
+  else {
+    res.sendStatus(403);
+  }
+ });
 
 app.post("/logout", (req, res)=>{
     res.clearCookie("user_id");
