@@ -7,19 +7,24 @@
  <% include partials/_header %>
 <h1> Currently Shortened </h1>
 <body>
-   <ul>
-    <% Object.keys(url).forEach(function(key)  { %>
-        <li><%= key + ":" + url[key] %>
-           <form method = "POST" action=<%-"/urls/" + key + "/delete"%>>
-             <input type="submit" value="Delete">
-           </form>
-        <form method = "GET" action=<%-"/urls/" + key %>>
-             <input type="submit" value="Edit">
-           </form>
-        </li>
-    <% }); %>
-</ul>
-<a href='#'> </a>
-</body>
-</html>
+    <ul>
+    <!-- Add your EJS code here -->
+        <% for (key in url) { %>
+            <li><%= url[key]["longURL"] %> - <%= key %></li>
+            <br>
+            <form method="POST" action="/urls/<%= key %>/delete">.
+                <a href="/urls/<%= key %>">Edit URL</a>
+                 &nbsp; &nbsp; &nbsp; <!-- nbsp = non breaking space -->
+                 <input type="submit" value="Delete Shortened URL">
+             </form>
+             <br><br>
+         <% }; %>
+     </ul>
+     <br>
+     <p>Click <a href="http://localhost:8080/urls/new">HERE</a> to shorten a new URL</p>
+
+ </body>
+
+ </html>
+
 
