@@ -13,12 +13,10 @@
  app.use(bodyParser.urlencoded({extended: true}));
  app.use(cookieParser());
 
- const urlDatabase = {
-   "b2xVn2": {longURL: "http://www.lighthouselabs.ca",
-              userID: "abcdef"},
-  "9sm5xK": {longURL: "http://www.google.com",
-              userID: "123456"}
-};
+  const urlDatabase = {
+   "b2xVn2" : "http://www.lighthouselabs.ca",
+   "9sm5xK" : "http://www.google.com"
+ };
 
 
  const users = {
@@ -44,36 +42,40 @@
 
  app.post("/urls/:id/delete", (req, res) => {
     let shortURL = urlDatabase[req.params.shortURL];
-   delete urlDatabase[req.params.id];
-   res.redirect("/urls");
-   console.log(req.params.id)
+    delete urlDatabase[req.params.id];
+    res.redirect("/urls");
+    console.log(req.params.id)
  });
 
  app.post("/urls/:id/update", (req, res) => {
-   console.log(req.body);
-   urlDatabase[req.params.id] = req.body.newURL
-   res.redirect('/urls');
-});
- app.post("/login", (req, res) => {
-  let userEmail = "";
-  let userPass = "";
-   for (let x in users) {
-    if (users[x]['email'] == req.body.email && users[x]['password'] == req.body.password) {
-      userEmail = req.body.email;
-      userPass = req.body.password;
-      res.cookie("user_id", users[x]["id"]);
-    }
-  }
-   if (userEmail.length > 0 && userPass.length > 0) {
-    res.redirect('/');
-  }
-  else {
-    res.sendStatus(403);
-  }
+    console.log(req.body);
+    urlDatabase[req.params.id] = req.body.newURL
+    res.redirect('/urls');
  });
+
+ app.post("/login", (req, res) => {
+   let userEmail = "";
+   let userPass = "";
+     for (let x in users) {
+     if (users[x]['email'] == req.body.email && users[x]['password'] == req.body.password) {
+        userEmail = req.body.email;
+        userPass = req.body.password;
+        res.cookie("user_id", users[x]["id"]);
+     }};
+     if (userEmail.length > 0 && userPass.length > 0) {
+        res.redirect('/');
+     }
+     if (!req.body.email || !req.body.password) {
+        res.status(400).send("Email and/or password field incomplete");
+     }
+     else {
+        res.sendStatus(403);
+     }
+ });
+
  app.post("/logout", (req, res)=>{
     res.clearCookie("user_id");
-     res.redirect('/urls')
+     res.redirect('/login')
  })
 
  app.post("/registration", (req, res) => {
@@ -135,6 +137,9 @@
 
 
  app.get("/urls/new", (req, res) => {
+     if (!req.cookies["user_id"]) {
+    res.redirect("/login")
+  }
    let templateVar = {
    user: users[req.cookies["user_id"]], url: urlDatabase };
    res.render("urls_new", templateVar);
