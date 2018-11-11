@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>TinyApp</title>
-  <% include partials/_header %>
-</head>
- <body>
-     <h4> Shortened URL:</h4>
-    <!-- Add your EJS code here -->
-        <li><%= [shortURL]["longURL"] %> - <%= shortURL %></li>
-        <li><%= "("+longURL+")" %></li>
-        <form action="/urls/<%= shortURL  %>/update" method="POST" style="margin:150px;">
-      <label for="newURL">Edit URL:</label>
-      <input id="newURL" type="text" name="newURL" placeholder="<%= longURL  %>" style="width: 300px">
-      <input type="submit" value="Submit">
-  </form>
-     <p>Click <a href="/urls/new">HERE</a> to shorten a new URL</p>
-
- </body>
-
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+     <title>TinyApp-ShowURL</title>
+   </head>
+   <body>
+     <header align="right">
+       <% include ./partials/_header %>
+    </header>
+    <div style="margin:50px;">
+      <h1 style="font-size:36px;">
+        ShortURL: <b><%=shortUrl%></b>
+      </h1>
+      <form action="/urls/<%=shortUrl%>" method="POST" style="font-size:18px; width:300px;">
+        <input name="newURL" type="text" value="<%=url%>">
+        <input type="submit" value="Update">
+      </form>
+    </div>
+   </body>
  </html>

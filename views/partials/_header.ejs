@@ -1,10 +1,11 @@
-  <% if(user && user.id){ %>
-    <%= user.id + " " + "Signed In" %>
-    <form method="POST" action="/logout">
-        <input type="submit" value="Logout" name="username">
-    </form>
-<% }%>
- <a href="http://localhost:8080/registration">Registration Page</a>
-  <div><a href="http://localhost:8080/login">Login Page</a></div>
-  <div><a href="http://localhost:8080/urls/new">Shorten URLS Here</a></div>
-
+<% if(user) { %>
+   <form action="/logout" method="POST">
+     <%= user %>
+    <input type="submit" value="Logout" style="margin:10px;">
+  </form>
+<% } else { %>
+<nav>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+  </nav>
+<% } %>

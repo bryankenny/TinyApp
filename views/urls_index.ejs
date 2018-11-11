@@ -1,30 +1,32 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
- <% include partials/_header %>
-<h1> Currently Shortened </h1>
-<body>
-    <ul>
-    <!-- Add your EJS code here -->
-        <% for (key in url) { %>
-            <li><%= url[key]["longURL"] %> - <%= key %></li>
-            <br>
-            <form method="POST" action="/urls/<%= key %>/delete">.
-                <a href="/urls/<%= key %>">Edit URL</a>
-                 &nbsp; &nbsp; &nbsp; <!-- nbsp = non breaking space -->
-                 <input type="submit" value="Delete Shortened URL">
+ <!DOCTYPE html>
+ <html lang="en">
+   <head>
+     <title>TinyApp-Index</title>
+   </head>
+   <body style="margin-left:50px; margin-right:50px;">
+    <header align="right">
+      <% include ./partials/_header %>
+    </header>
+    <h1>URL Index</h1>
+    <a href="/urls/new">Create a New Short Link</a>
+    <table style="margin:50px;">
+      <% for (var url in urls) { %>
+          <tr style="height:30px;">
+            <form action="/urls/<%=url%>/delete" method="POST">
+               <td><%=url%></td>
+               <td>&rarr;</td>
+               <td style="width:250px;">
+                 <a href="<%= urls[url].url %>"><%=urls[url].url%></a>
+               </td>
+               <td style="width:50px;">
+                 <a href="/urls/<%=url%>">Edit</a>
+               </td>
+               <td>
+                 <button>Delete<img src="https://cdn3.iconfinder.com/data/icons/cleaning-icons/512/Trash_Can-256.png" width="20" height="20"></button>
+               </td>
              </form>
-             <br><br>
-         <% }; %>
-     </ul>
-     <br>
-     <p>Click <a href="http://localhost:8080/urls/new">HERE</a> to shorten a new URL</p>
-
- </body>
-
+           </tr>
+       <% } %>
+     </table>
+   </body>
  </html>
-
-
