@@ -50,7 +50,7 @@
    };
 
 
- function addUrl(longUrl, user) {
+ function insertUrl(longUrl, user) {
    let newShortUrl = "";
 
    do {
@@ -59,6 +59,17 @@
    urlDatabase[newShortUrl] = { url: longUrl, userID: user };
    return newShortUrl;
  }
+
+
+ function usersURLS(id) {
+   let subset = {};
+   for (let url in urlDatabase) {
+     if (urlDatabase[url].userID === id) {
+       subset[url] = urlDatabase[url];
+     }
+   }
+   return subset;
+}
 
 
  function addUser(email, password) {
@@ -98,15 +109,7 @@
  }
 
 
- function urlsForUser(id) {
-   let subset = {};
-   for (let url in urlDatabase) {
-     if (urlDatabase[url].userID === id) {
-       subset[url] = urlDatabase[url];
-     }
-   }
-   return subset;
-}
+// Get req's
 
 app.get("/", (req, res) => {
   let userId = req.session.user_id;
@@ -126,7 +129,7 @@ app.get("/", (req, res) => {
 
  app.get("/urls", (req, res) => {
   let userId = req.session.user_id;
-  let urls = urlsForUser(userId);
+  let urls = usersURLS(userId);
   if (!userId || !users[userId]) {
         res.redirect("/login");
   } else {
@@ -198,6 +201,8 @@ app.get("/", (req, res) => {
   }
 });
 
+ // post req's
+
 app.post("/urls/:id/delete", (req, res) => {
    let userId = req.session.user_id;
   if(!userId || !users[userId]) {
@@ -235,32 +240,26 @@ app.post("/urls", (req, res) => {
   if(!userId || !users[userId]) {
     res.sendStatus(401);  // Unauthorized
   } else {
-    let shortURL = addUrl(req.body.longURL, userId);
+    let shortURL = insertUrl(req.body.longURL, userId);
     res.redirect(`/urls/${shortURL}`);
   }
 });
 
 //  login
-app.post("/login", (req, res) => {
-    let userEmail = "";
-    let userPass = "";
-      for (let x in users) {
-      if (users[x]['email'] == req.body.email && users[x]['password'] == req.body.password) {
-         userEmail = req.body.email;
-         userPass = req.body.password;
-         res.cookie("user_id", users[x]["id"]);
-      }};
-      if (userEmail.length > 0 && userPass.length > 0) {
-         res.redirect('/');
-      }
-      if (!req.body.email || !req.body.password) {
-         res.status(400).send("Email and/or password field incomplete");
-      }
-      else {
-         res.sendStatus(403);
-      }
-  });
 
+app.post("/login", (req, res) => {
+  if (!req.body.email || !req.body.password) {
+        res.sendStatus(400);  // Bad Request
+  } else {
+    let userId = findUser(req.body.email, req.body.password);
+    if (!userId) {
+      res.sendStatus(403);  // Forbidden
+    } else {
+      req.session.user_id = userId;
+      res.redirect("/urls");
+    }
+  }
+});
  // logout
  app.post("/logout", (req, res) => {
    req.session.user_id = null;

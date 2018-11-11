@@ -1,20 +1,18 @@
  <!DOCTYPE html>
  <html lang="en">
    <head>
-     <title>TinyApp-Index</title>
+     <title>Index</title>
+     <% include ./partials/_header %>
    </head>
-   <body style="margin-left:50px; margin-right:50px;">
-    <header align="right">
-      <% include ./partials/_header %>
+   <body>
+    <header>
     </header>
-    <h1>URL Index</h1>
-    <a href="/urls/new">Create a New Short Link</a>
+    <h1 style="font-family:sans-serif;"><u>Your Shortened URL's:</u></h1>
     <table style="margin:50px;">
       <% for (var url in urls) { %>
           <tr style="height:30px;">
             <form action="/urls/<%=url%>/delete" method="POST">
-               <td><%=url%></td>
-               <td>&rarr;</td>
+               <td><%=url + ":" %></td>
                <td style="width:250px;">
                  <a href="<%= urls[url].url %>"><%=urls[url].url%></a>
                </td>
@@ -22,11 +20,14 @@
                  <a href="/urls/<%=url%>">Edit</a>
                </td>
                <td>
-                 <button>Delete<img src="https://cdn3.iconfinder.com/data/icons/cleaning-icons/512/Trash_Can-256.png" width="20" height="20"></button>
+                 <button>Delete URL<img src="https://image.flaticon.com/icons/svg/0/39.svg" width="20" height="22"></button>
                </td>
              </form>
            </tr>
        <% } %>
      </table>
+ <form action="/urls/new" class="inline">
+    <button class="float-left submit-button">Shorten URL's Here  <img src="http://cdn.onlinewebfonts.com/svg/img_148365.png" width="20" height="22"></button>
+</form>
    </body>
  </html>
