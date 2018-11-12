@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head></head>
-  <h1> TinyApp URL Shortener </h1>
+  <% include partials/_header %>
+  <h1 style="font-family:sans-serif;"> TinyApp </h1>
+    <h3 style="font-family:cursive;"> Shortener of URL's </h3>
   <body style="font-size:20px; padding:50px;">
-    <% include partials/_header %>
     <form action="/urls" method="POST" style="margin:150px;">
       <label for="longURL">Shorten a URL:</label>
-      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+      <input id="longURL" type="text" name="longURL" value="http://" style="width: 300px">
       <input type="submit" value="Shrink It">
     </form>
   </body>

@@ -50,26 +50,26 @@
    };
 
 
- function insertUrl(longUrl, user) {
-   let newShortUrl = "";
-
-   do {
-     newShortUrl = generateRandomString();
-   } while(urlDatabase[newShortUrl])
-   urlDatabase[newShortUrl] = { url: longUrl, userID: user };
-   return newShortUrl;
- }
-
-
  function usersURLS(id) {
-   let subset = {};
+   let result = {};
    for (let url in urlDatabase) {
      if (urlDatabase[url].userID === id) {
-       subset[url] = urlDatabase[url];
+       result[url] = urlDatabase[url];
      }
    }
-   return subset;
+   return result;
 }
+
+
+ function canRegistered(email) {
+   let signal = true;
+   for (let user in users) {
+     if (users[user].email === email) {
+       return false;
+     }
+   }
+   return true;
+ }
 
 
  function addUser(email, password) {
@@ -87,14 +87,14 @@
  }
 
 
- function canRegistered(email) {
-   let flag = true;
-   for (let user in users) {
-     if (users[user].email === email) {
-       return false;
-     }
-   }
-   return true;
+
+ function insertUrl(longUrl, user) {
+   let newShortUrl = "";
+   do {
+     newShortUrl = generateRandomString();
+   } while(urlDatabase[newShortUrl])
+   urlDatabase[newShortUrl] = { url: longUrl, userID: user };
+   return newShortUrl;
  }
 
 
